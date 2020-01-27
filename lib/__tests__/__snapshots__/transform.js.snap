@@ -71,30 +71,6 @@ foo
 =========="
 `;
 
-exports[`classic components handles \`classNameBindings\` correctly 1`] = `
-"==========
-
-    export default Component.extend({
-      classNameBindings: ['a:b', 'x:y:z', 'foo::bar'],
-    });
-  
-~~~~~~~~~~
-foo
-~~~~~~~~~~
- => tagName: div
-~~~~~~~~~~
-
-    export default Component.extend({
-      tagName: \\"\\",
-    });
-  
-~~~~~~~~~~
-<div class=\\"{{if this.a \\"b\\"}} {{if this.x \\"y\\" \\"z\\"}} {{unless this.foo \\"bar\\"}}\\" ...attributes>
-  foo
-</div>
-=========="
-`;
-
 exports[`classic components handles \`classNames\` correctly 1`] = `
 "==========
 
@@ -162,6 +138,30 @@ foo
   
 ~~~~~~~~~~
 <div class=\\"{{styleNamespace}} foo bar:baz\\" ...attributes>
+  foo
+</div>
+=========="
+`;
+
+exports[`classic components handles boolean \`classNameBindings\` correctly 1`] = `
+"==========
+
+    export default Component.extend({
+      classNameBindings: ['a:b', 'x:y:z', 'foo::bar'],
+    });
+  
+~~~~~~~~~~
+foo
+~~~~~~~~~~
+ => tagName: div
+~~~~~~~~~~
+
+    export default Component.extend({
+      tagName: \\"\\",
+    });
+  
+~~~~~~~~~~
+<div class=\\"{{if this.a \\"b\\"}} {{if this.x \\"y\\" \\"z\\"}} {{unless this.foo \\"bar\\"}}\\" ...attributes>
   foo
 </div>
 =========="
@@ -399,14 +399,22 @@ foo
 =========="
 `;
 
-exports[`native components handles \`@classNameBindings\` correctly 1`] = `
+exports[`native components handles \`@classNameBindings\` based on type correctly 1`] = `
 "==========
 
       import Component from '@ember/component';
       import { classNameBindings } from '@ember-decorators/component';
 
-      @classNameBindings('a:b', 'x:y:z', 'foo::bar')
+      @classNameBindings('foo', 'bar', 'baz', 'isSelected', 'customClass')
       export default class FooComponent extends Component {
+        foo = true;
+        bar = 'hey';
+        baz;
+        isSelected = false;
+
+        get customClass() {
+          return 'unknown';
+        }
       }
     
 ~~~~~~~~~~
@@ -420,10 +428,18 @@ foo
 
       @tagName(\\"\\")
       export default class FooComponent extends Component {
+        foo = true;
+        bar = 'hey';
+        baz;
+        isSelected = false;
+
+        get customClass() {
+          return 'unknown';
+        }
       }
     
 ~~~~~~~~~~
-<div class=\\"{{if this.a \\"b\\"}} {{if this.x \\"y\\" \\"z\\"}} {{unless this.foo \\"bar\\"}}\\" ...attributes>
+<div class=\\"{{if this.foo \\"foo\\"}} {{this.bar}} {{this.baz}} {{if this.isSelected \\"is-selected\\"}} {{this.customClass}}\\" ...attributes>
   foo
 </div>
 =========="
@@ -512,6 +528,36 @@ foo
     
 ~~~~~~~~~~
 <div class=\\"{{styleNamespace}} foo bar:baz\\" ...attributes>
+  foo
+</div>
+=========="
+`;
+
+exports[`native components handles boolean \`@classNameBindings\` correctly 1`] = `
+"==========
+
+      import Component from '@ember/component';
+      import { classNameBindings } from '@ember-decorators/component';
+
+      @classNameBindings('a:b', 'x:y:z', 'foo::bar')
+      export default class FooComponent extends Component {
+      }
+    
+~~~~~~~~~~
+foo
+~~~~~~~~~~
+ => tagName: div
+~~~~~~~~~~
+
+      import Component from '@ember/component';
+      import { tagName } from '@ember-decorators/component';
+
+      @tagName(\\"\\")
+      export default class FooComponent extends Component {
+      }
+    
+~~~~~~~~~~
+<div class=\\"{{if this.a \\"b\\"}} {{if this.x \\"y\\" \\"z\\"}} {{unless this.foo \\"bar\\"}}\\" ...attributes>
   foo
 </div>
 =========="

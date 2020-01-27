@@ -20,6 +20,7 @@
     "ember-template-recast": "^4.0.0",
     "globby": "^11.0.0",
     "jscodeshift": "^0.7.0",
+    "lodash": "^4.17.15",
     "pkg-dir": "^4.2.0"
   },
   "devDependencies": {
